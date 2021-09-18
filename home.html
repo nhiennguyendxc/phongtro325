@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Quản lý phòng trọ 325</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <script src="./js/query.min.js"></script>
+  <script src="./js/popper.min.js"></script>
+  <script src="./js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="./css/style.css">
+
+  <style>
+    body {
+      margin: 8px;
+      padding: 20px;
+      background: #fff;
+    }
+
+    .ml-20 {
+      margin-left: 20px;
+    }
+
+    .form-field {
+      padding: 20px;
+      border: 1px solid #d1d1d1
+    }
+
+    .btn-excel {
+      background: #4dd44d;
+      color: #fff;
+    }
+
+    .btn-edit {
+      background: Red;
+      color: #fff;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .space {
+      flex: 1 0 auto;
+    }
+
+    .pd-0 {
+      padding: 0;
+    }
+
+    /* loader */
+    .lds-facebook {
+      display: inline-block;
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      top: 25%;
+      left: 50%;
+    }
+
+    .lds-facebook div {
+      display: inline-block;
+      position: absolute;
+      left: 8px;
+      width: 16px;
+      background: red;
+      animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+    }
+
+    .lds-facebook div:nth-child(1) {
+      left: 8px;
+      animation-delay: -0.24s;
+    }
+
+    .lds-facebook div:nth-child(2) {
+      left: 32px;
+      animation-delay: -0.12s;
+    }
+
+    .lds-facebook div:nth-child(3) {
+      left: 56px;
+      animation-delay: 0;
+    }
+
+    @keyframes lds-facebook {
+      0% {
+        top: 8px;
+        height: 64px;
+      }
+
+      50%,
+      100% {
+        top: 24px;
+        height: 32px;
+      }
+    }
+
+    /* end loader */
+  </style>
+</head>
+
+<body>
+  <div class="container-full">
+    <div class="report" style="padding: 50px;border: 1px solid #d1d1d166;margin-bottom: 50px;width: 100%;display: none;"
+      id="report">
+      <table class="" id=""
+        style="font-weight: 500;border: 1px solid #e4e4e4;width: 100%;margin-bottom: 100px;margin-top: 50px;">
+        <thead>
+          <tr>
+            <th id="title-report" colspan="4" style="text-align: center;font-size: 24px;">PHIẾU BÁO TIỀN
+              PHÒNG - THÁNG</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border: 1px solid #dee2e6;">
+            <td style="padding-left: 20px;border: 1px solid #dee2e6;width: 25%;">Phòng</td>
+            <td style="text-align: right;border: 1px solid #dee2e6;" colspan="3" id="room-report"></td>
+          </tr>
+          <tr style="border: 1px solid #dee2e6;">
+            <td style="padding-left: 20px;border: 1px solid #dee2e6;">Tiền Phòng</td>
+            <td style="text-align: right;border: 1px solid #dee2e6;" colspan="3" id="price-room"></td>
+          </tr>
+          <tr style="border: 1px solid #dee2e6;">
+            <td style="padding-left: 20px;border: 1px solid #dee2e6;">Điện SH</td>
+            <td style="border: 1px solid #dee2e6;text-align: center;" id="elec-old"></td>
+            <td style="border: 1px solid #dee2e6;text-align: center;" id="elec-new"> </td>
+            <td style="text-align: right;;border: 1px solid #dee2e6;border: 1px solid #dee2e6;" id="elec-total"><b></b>
+            </td>
+          </tr>
+          <tr style="border: 1px solid #dee2e6;">
+            <td style="padding-left: 20px;;border: 1px solid #dee2e6;">Nước SH</td>
+            <td style="border: 1px solid #dee2e6;text-align: center;" id="water-old"></td>
+            <td style="border: 1px solid #dee2e6;text-align: center;" id="water-new"></td>
+            <td style="text-align: right;;border: 1px solid #dee2e6;" id="water-total"><b></b></td>
+          </tr>
+          <tr style="border: 1px solid #dee2e6;">
+            <td style="padding-left: 20px;;border: 1px solid #dee2e6;">Internet</td>
+            <td style="border: 1px solid #dee2e6;"></td>
+            <td style="border: 1px solid #dee2e6;"></td>
+            <td style="text-align: right;;border: 1px solid #dee2e6;" id="price-internet"></td>
+          </tr>
+          <tr style="border: 1px solid #dee2e6;">
+            <td style="padding-left: 20px;;border: 1px solid #dee2e6;">Cáp Tivi</td>
+            <td style="border: 1px solid #dee2e6;"></td>
+            <td style="border: 1px solid #dee2e6;"></td>
+            <td style="text-align: right;;border: 1px solid #dee2e6;" id="price-cap"></td>
+          </tr>
+          <tr style="border: 1px solid #dee2e6;">
+            <td style="padding-left: 20px;;border: 1px solid #dee2e6;">Rác SH</td>
+            <td style="border: 1px solid #dee2e6;"></td>
+            <td style="border: 1px solid #dee2e6;"></td>
+            <td style="text-align: right;border: 1px solid #dee2e6;" id="price-rac"><b></b></td>
+          </tr>
+          <tr style="border: 1px solid #dee2e6;">
+            <td style="padding-left: 20px;border: 1px solid #dee2e6;">Nợ Trước</td>
+            <td style="border: 1px solid #dee2e6;"></td>
+            <td style="border: 1px solid #dee2e6;"></td>
+            <td style="text-align: right;border: 1px solid #dee2e6;" id="no-cu"></td>
+          </tr>
+          <tr style="border: 1px solid #dee2e6;">
+            <td style="padding-left: 20px;border: 1px solid #dee2e6;"><b>TỔNG CỘNG</b></td>
+            <td style="border: 1px solid #dee2e6;"></td>
+            <td style="border: 1px solid #dee2e6;"></td>
+            <td style="text-align: right;border: 1px solid #dee2e6;" id="total-all"></td>
+          </tr>
+          <tr>
+            <td colspan="4" style="font-size: 18px;text-align: center;">
+              <i>Quý khách vui lòng chụp đồng hồ nước hoặc ghi số nước khi tính tiền</i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="container-full">
+    <div class="layout">
+      <form class="form-field">
+        <div class="row">
+          <div class="form-group col-sm-3">
+            <label for="month">Lựa chọn Tháng:</label>
+            <select class="form-control" onchange="xemDanhSach()" id="months">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-3">
+            <label for="years">Lựa chọn Năm:</label>
+            <select class="form-control" onchange="xemDanhSach()" id="years">
+              <option>2021</option>
+              <option>2022</option>
+              <option>2023</option>
+              <option>2024</option>
+              <option>2025</option>
+              <option>2026</option>
+              <option>2027</option>
+              <option>2028</option>
+              <option>2029</option>
+              <option>2030</option>
+            </select>
+          </div>
+          <div class="col-sm-3">
+            <p for="" style="margin-bottom: 8px;" class="form-label">&puncsp;</p>
+            <div class="">
+              <button type="button" class="btn btn-primary w-100" onclick="xemDanhSach()">Xem</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <form class="form form-field hidden" id="form-info">
+      <div class="mb-3 row">
+        <div class="col-sm-3">
+          <label for="username" class="form-label">Giá Điện</label>
+          <input type="text" class="form-control" id="electric">
+        </div>
+        <div class="col-sm-3">
+          <label for="username" class="form-label">Giá Nước</label>
+          <input type="text" class="form-control" id="water-price">
+        </div>
+
+        <div class="col-sm-3">
+          <label for="username" class="form-label">Giảm Tiền Phòng</label>
+          <input type="text" class="form-control" id="giam-price">
+        </div>
+
+        <div class="col-sm-3">
+          <p for="" style="margin-bottom: 8px;" class="form-label">&puncsp;</p>
+          <div class="">
+            <button type="button" class="btn btn-primary w-100" onclick="apply()">Áp dụng</button>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-sm-3">
+          <button type="button" id="btnInsert" class="btn btn-danger hidden w-100" title="Nhập dữ liệu"
+            onclick="insertDataRow();">Nhập Nhanh</button>
+        </div>
+        <div class="col-sm-3">
+          <button type="button" id="btnExportExcel" class="btn btn-primary hidden w-100" title="Xuất file excel"
+            onclick="fnExcelReport();">EXPORT EXCEL</button>
+        </div>
+        <div class="col-sm-3">
+          <button type="button" id="btnExportPDF" class="btn btn-info hidden w-100"
+            title="Xuất PDF tất cả các phòng" onclick="fnPDFReport();"> EXPORT PDF</button>
+        </div>
+      </div>
+    </form>
+
+    <table class="table table-bordered table-striped table-hover" id="table-price">
+      <thead class="">
+        <tr class="text-center">
+          <th>STT</th>
+          <th>Phòng</th>
+          <th>Tiền phòng</th>
+          <th>Điện Cũ</th>
+          <th>Điện Mới</th>
+          <th>Tổng</th>
+          <th>Giá</th>
+          <th>Thành Tiền</th>
+          <th>Nước Cũ</th>
+          <th>Nước Mới</th>
+          <th>Tổng</th>
+          <th>Giá</th>
+          <th>Thành Tiền</th>
+          <th>Rác</th>
+          <th>Internet</th>
+          <th>Cap TV</th>
+          <th>Nợ Cũ</th>
+          <th>Tổng Tiền</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="form-edit" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="title-form"></h4>
+        </div>
+        <div class="modal-body">
+          <form class="form" id="login-form">
+            <div class="mb-3">
+              <label for="GiaPhong" class="form-label">Tiền Phòng</label>
+              <input type="text" class="form-control" id="GiaPhong">
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-6">
+                <label for="DienCu" class="form-label">Số Điện Cũ</label>
+                <input type="text" class="form-control" id="DienCu">
+              </div>
+              <div class="col-sm-6">
+                <label for="DienMoi" class="form-label">Số Điện Mới</label>
+                <input type="text" class="form-control" id="DienMoi">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-6">
+                <label for="NuocCu" class="form-label">Số Nước Cũ</label>
+                <input type="text" class="form-control" id="NuocCu">
+              </div>
+              <div class="col-sm-6">
+                <label for="NuocMoi" class="form-label">Số Nước Mới</label>
+                <input type="text" class="form-control" id="NuocMoi">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-12">
+                <label for="NoCu" class="form-label">Nợ cũ</label>
+                <input type="text" class="form-control" id="NoCu">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <p id="message" class="text-danger w-100"></p>
+
+          <button type="button" id="update" onclick="updateData()" class="btn btn-primary btn-lg col-sm-6">Cập
+            Nhật</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal Insert-->
+  <div class="modal fade" id="form-insert" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="title-form-insert"></h4>
+          <button type="button" class="btn btn-success btn-lg" data-dismiss="modal"
+            onclick="updateInsertData()">Đóng</button>
+        </div>
+        <div class="modal-body">
+          <form class="form" id="insert-form">
+            <div class="mb-3">
+              <label for="GiaPhong" class="form-label">Phòng</label>
+              <input type="text" class="form-control" readonly id="Phong-insert">
+            </div>
+            <div class="mb-3">
+              <label for="GiaPhong" class="form-label">Tiền Phòng</label>
+              <input type="text" class="form-control" id="GiaPhong-insert">
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-6">
+                <label for="DienCu" class="form-label">Số Điện Cũ</label>
+                <input type="text" class="form-control" id="DienCu-insert">
+              </div>
+              <div class="col-sm-6">
+                <label for="DienMoi" class="form-label">Số Điện Mới</label>
+                <input type="text" class="form-control" id="DienMoi-insert">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-6">
+                <label for="NuocCu" class="form-label">Số Nước Cũ</label>
+                <input type="text" class="form-control" id="NuocCu-insert">
+              </div>
+              <div class="col-sm-6">
+                <label for="NuocMoi" class="form-label">Số Nước Mới</label>
+                <input type="text" class="form-control" id="NuocMoi-insert">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-12">
+                <label for="NoCu" class="form-label">Nợ cũ</label>
+                <input type="text" class="form-control" id="NoCu-insert">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <p id="message-insert" class="text-danger w-100"></p>
+          <div class="col-sm-12 d-flex pd-0">
+            <button type="button" id="update" onclick="back()" class="btn btn-primary btn-lg col-sm-5">Lùi
+              Lại</button>
+            <div class="space"></div>
+            <button type="button" id="update" onclick="next()" class="btn btn-danger btn-lg col-sm-5">Tiếp
+              Theo</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script>
+    var elec = 3500;
+    var water = 7000;
+    var discount = 500000;
+    var key = "room325";
+    var idElec = "electric";
+    var idWater = "water-price";
+    var count = 1;
+    var database = {};
+
+    var currentArray = [];
+    var currentMonth = 0;
+    var currentYear = 0;
+
+    var months = Array.from({ length: 12 }, (_, index) => index + 1);
+    var years = Array.from({ length: 10 }, (_, index) => index + 2021);
+
+    function loadDanhSach() {
+      var ds = ["101A", "102A", "103A", "104A", "105A", "106A", "107A", "108A", "109A",
+        "110A", "111A", "112A", "113A", "114A", "115A", "116A", "117A", "118A", "119A", "120A", "121A", "122A",
+        "201A", "202A", "203A", "204A", "205A", "206A", "207A", "208A", "209A", "210A", "211A", "212A", "213A", "214A",
+        "215A", "216A", "217A", "218A", "219A", "220A", "221A", "222A",
+        "301A", "302A", "303A", "304A", "305A", "306A", "307A", "308A", "309A", "310A", "311A", "312A", "313A",
+        "314A", "315A", "316A", "317A", "318A", "319A", "320A", "321A", "322A",
+        "101B", "102B", "103B", "104B", "105B", "106B", "107B", "108B", "109B", "110B", "111B", "112B", "113B", "114B",
+        "201B", "202B", "203B", "204B", "205B", "206B", "207B", "208B", "209B", "210B", "211B", "212B", "213B", "214B",
+        "301B", "302B", "303B", "304B", "305B", "306B", "307B", "308B", "309B", "310B", "311B", "312B", "313B", "314B",
+        "101C", "102C", "103C", "104C", "105C", "106C", "107C", "108C", "109C", "110C", "111C", "112C", "113C", "114C",
+        "201C", "202C", "203C", "204C", "205C", "206C", "207C", "208C", "209C", "210C", "211C", "212C", "213C", "214C",
+        "301C", "302C", "303C", "304C", "305C", "306C", "307C", "308C", "309C", "310C", "311C", "312C", "313C", "314C",
+        "101D", "102D", "103D", "104D", "105D", "106D", "107D", "108D", "109D", "110D", "111D", "112D", "113D", "114D",
+        "201D", "202D", "203D", "204D", "205D", "206D", "207D", "208D", "209D", "210D", "211D", "212D", "213D", "214D",
+        "301D", "302D", "303D", "304D", "305D", "306D", "307D", "308D", "309D", "310D", "311D", "312D", "313D", "314D",
+        "Tạp Hóa", "NHÀ XE"
+      ];
+      return ds;
+    };
+
+    function initDb(month, year) {
+      currentMonth = month;
+      currentYear = year;
+      currentArray = [];
+      var property = `${month}${year}`;
+      var arr = localStorage.getItem(key);
+      database = !arr ? {} : JSON.parse(arr);
+      if (!database[property])
+        database[property] = [];
+      if (database[property] && database[property].length > 0) {
+        currentArray = database[property];
+      }
+      if (currentArray && currentArray.length) {
+        currentArray.forEach((el, index) => {
+          var old = findOldData(month, year, el.Phong);
+          if (old.dien > 0 || old.nuoc > 0) {
+            currentArray[index].DienCu = old.dien;
+            currentArray[index].NuocCu = old.nuoc;
+          }
+        });
+        return false;
+      }
+      database[property] = [];
+      loadDanhSach().forEach(room => {
+        var old = findOldData(month, year, room);
+        var row = initRow(room, old);
+        database[property].push(row)
+      });
+      currentArray = database[property];
+      saveDatabase();
+    }
+
+    function findOldData(month, year, room) {
+      year = month == 1 ? year - 1 : year;
+      month = month == 1 ? 12 : month - 1;
+      var property = `${month}${year}`;
+      var db = database[property] ? database[property] : [];
+      var dCu = 0;
+      var nCu = 0;
+      if (!db || !db.length) {
+        return { dien: dCu, nuoc: nCu };
+      }
+      var row = db.find(s => s.Phong == room);
+
+      if (row) {
+        dCu = row.DienMoi;
+        nCu = row.NuocMoi;
+      }
+      return { dien: dCu, nuoc: nCu };
+    }
+
+    function initRow(room, obj) {
+      count++;
+      var tang = parseInt(room.charAt(0).toLowerCase());
+      tang = tang != 1 && tang != 2 && tang != 3 ? 0 : tang;
+      var gia = 0;
+      if (room === "NHÀ XE") {
+        gia = 10000000;
+      }
+      if (room === "Tạp Hóa") {
+        gia = 3400000;
+      }
+      if (tang === 1) {
+        gia = 2200000;
+      }
+      if (tang === 2) {
+        gia = 1900000;
+      }
+      if (tang === 3) {
+        gia = 1700000;
+      }
+      return {
+        Id: count,
+        Tang: tang,
+        Phong: room,
+        GiaPhong: gia,
+        NuocCu: obj.nuoc,
+        NuocMoi: 0,
+        GiaNuoc: 0,
+        TienNuoc: 0,
+        DienCu: obj.dien,
+        DienMoi: 0,
+        GiaDien: 0,
+        TienDien: 0,
+        NoCu: 0,
+        Rac: 20000,
+        Internet: 0,
+        CapTV: 0,
+        Tong: 0
+      }
+    };
+
+
+    var idEdit = 0;
+    $(document).ready(function () {
+      document.getElementById(idElec).value = elec;
+      document.getElementById(idWater).value = water;
+    });
+
+    function saveDatabase() {
+      localStorage.setItem(key, JSON.stringify(database));
+    }
+
+    function loadData() {
+      $("#table-price tbody tr").remove();
+      currentArray.sort(function (a, b) {
+        return a.Tang - b.Tang;
+      });
+      currentArray.forEach(element => {
+        var d = element.DienMoi > 0 ? element.DienMoi - element.DienCu : 0;
+        var n = element.NuocMoi > 0 ? element.NuocMoi - element.NuocCu : 0;
+        element.TienDien = parseInt(d * elec);
+        element.TienNuoc = parseInt(n * water);
+        var t = element.TienDien + element.TienNuoc + parseInt(element.NoCu) + parseInt(element.GiaPhong) + parseInt(element.Rac) + parseInt(element.Internet) + parseInt(element.CapTV);
+        element.Tong = t;
+        var html = `<tr id="row${element.Id}">
+          <td>
+            <button class="btn btn-edit" title="Chỉnh sửa thông tin phòng" onclick="setFromValue(${element.Id})" id="${element.Id}"> <i class="fa fa-pencil-square-o"></i></button>
+            <button class="btn btn-excel" onclick="exportRow(${element.Id})" title="Xuất file pdf phòng" id="export-${element.Id}"><i class="fa fa-file-excel-o"></i></button>
+            </td>
+          <td>${element.Phong}</td>
+          <td>${formatMoney(element.GiaPhong)}</td>
+          <td>${element.DienCu}</td>
+          <td>${element.DienMoi}</td>
+          <td>${d}</td>
+          <td>${formatMoney(elec)}</td>
+          <td>${formatMoney(element.TienDien)}</td>
+          <td>${element.NuocCu}</td>
+          <td>${element.NuocMoi}</td>
+          <td>${n}</td>
+          <td>${formatMoney(water)}</td>
+          <td>${formatMoney(element.TienNuoc)}</td>
+          <td>${formatMoney(element.Rac)}</td>
+          <td>${formatMoney(element.Internet)}</td>
+          <td>${formatMoney(element.CapTV)}</td>
+          <td>${element.NoCu}</td>
+          <td>${formatMoney(element.Tong)}</td>
+          </tr>`;
+        $("#table-price").find('tbody').append(html);
+      });
+
+    };
+
+    function getMonth() {
+      var currentDay = new Date();
+      var day = currentDay.getDate();
+      var month = currentDay.getMonth();
+      if (day < 10)
+        month -= 1;
+      return `${month}${currentDay.getFullYear()}`;
+    }
+
+    function updateDb(obj) {
+      var property = `${currentMonth}${currentYear}`;
+      database[property] = obj;
+      saveDatabase();
+      loadData();
+    };
+
+    function formatMoney(num) {
+      return num ? num.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : 0;
+    };
+
+    function setFromValue(id) {
+      idEdit = id;
+      $('#form-edit').modal('toggle');
+
+      setTimeout(() => {
+        var element = currentArray.find(s => s.Id == id);
+        document.getElementById("title-form").innerHTML = "Chỉnh sửa thông tin phòng: " + element["Phong"];
+        console.log(element);
+        Object.keys(element).forEach((key, index) => {
+          var row = document.getElementById(key);
+          if (row) {
+            row.value = element[key]
+          }
+        })
+      }, 1000);
+    };
+
+    function updateData() {
+      var item = getFormValue();
+      var msg = '';
+
+      if (item.NuocMoi < item.NuocCu) {
+        msg = "Số nước mới phải lớn hơn số nước cũ";
+      }
+      if (item.DienMoi < item.DienCu) {
+        msg = "Số điện mới phải lớn hơn số điện cũ";
+      }
+      if (msg) {
+        document.getElementById("message").innerHTML = msg;
+        return false;
+      } else {
+        document.getElementById("message").innerHTML = '';
+        updateOneRow(idEdit, item);
+        $('#form-edit').modal('toggle');
+      }
+
+    }
+
+    function updateOneRow(id, item) {
+      var i = currentArray.findIndex(s => s.Id == id);
+      if (i > -1) {
+        currentArray[i].GiaPhong = parseInt(item.GiaPhong);
+        currentArray[i].DienCu = parseInt(item.DienCu);
+        currentArray[i].DienMoi = parseInt(item.DienMoi);
+        currentArray[i].NuocCu = parseInt(item.NuocCu);
+        currentArray[i].NuocMoi = parseInt(item.NuocMoi);
+        currentArray[i].NoCu = parseInt(item.NoCu);
+      }
+      updateDb(currentArray);
+    }
+
+    function getFormValue() {
+      var GiaPhong = document.getElementById("GiaPhong").value;
+      var DienCu = parseInt(document.getElementById("DienCu").value);
+      var DienMoi = parseInt(document.getElementById("DienMoi").value);
+      var NuocCu = parseInt(document.getElementById("NuocCu").value);
+      var NuocMoi = parseInt(document.getElementById("NuocMoi").value);
+      var NoCu = document.getElementById("NoCu").value;
+      return { GiaPhong, DienCu, DienMoi, NuocCu, NuocMoi, NoCu };
+    }
+
+    function apply() {
+      var d = document.getElementById("electric").value;
+      var n = document.getElementById("water-price").value;
+      var giam = document.getElementById("giam-price").value;
+
+      currentArray.forEach(el => {
+        el.GiaPhong -= parseInt(giam);
+        el.GiaDien = d;
+        el.GiaNuoc = n;
+        el.Giam = parseInt(giam);
+      });
+      updateDb(currentArray);
+    };
+
+
+    function fnExcelReport() {
+      if (currentArray && currentArray.length > 0) {
+        var tab_text = $("#table-price")[0].outerHTML;
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+        var title = `Phòng trọ 325 - THÁNG ${currentMonth}/${currentYear}`;
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+
+          txtArea1.document.open("txt/html", "replace");
+          txtArea1.document.write(tab_text);
+          txtArea1.document.close();
+          txtArea1.focus();
+          sa = txtArea1.document.execCommand("SaveAs", true, `${title}.xls`);
+        }
+        else
+          sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+        return (sa);
+      }
+    }
+
+    function fnPDFReport() {
+      var source = '';
+      currentArray.forEach(el => {
+        debugger;
+        source += exportPDFRow(el);
+      });
+      if (source)
+        printPDF(source);
+    }
+
+    function xemDanhSach() {
+      showLoader();
+      var m = document.getElementById("months").value;
+      var y = document.getElementById("years").value;
+      $("#btnInsert").removeClass("hidden");
+      $("#btnExportExcel").removeClass("hidden");
+      $("#btnExportPDF").removeClass("hidden");
+      $("#form-info").removeClass("hidden");
+      initDb(m, y);
+      loadData();
+    }
+
+    // xuất file pdf theo phòng
+    function exportRow(id) {
+      var element = currentArray.find(s => s.Id == id);
+      if (element) {
+        var source = exportPDFRow(element);
+        printPDF(source);
+      }
+    };
+
+    function exportPDFRow(element) {
+      document.getElementById("title-report").innerHTML = `PHIẾU BÁO TIỀN PHÒNG - THÁNG ${currentMonth}/${currentYear}`;
+      document.getElementById("room-report").innerHTML = `<b>${element.Phong}</b>`;
+      document.getElementById("price-room").innerHTML = `<b>${formatMoney(element.GiaPhong)}</b>`;
+
+      document.getElementById("elec-old").innerHTML = `<b>${element.DienCu}</b>`;
+      document.getElementById("elec-new").innerHTML = `<b>${element.DienMoi}</b>`;
+      document.getElementById("elec-total").innerHTML = `<b>${formatMoney(element.TienDien)}</b>`;
+
+      document.getElementById("water-old").innerHTML = `<b>${element.NuocCu}</b>`;
+      document.getElementById("water-new").innerHTML = `<b>${element.NuocMoi}</b>`;
+      document.getElementById("water-total").innerHTML = `<b>${formatMoney(element.TienNuoc)}</b>`;
+
+
+      document.getElementById("price-cap").innerHTML = parseInt(element.CapTV) > 0 ? `<b>${formatMoney(element.CapTV)}</b>` : '';
+      document.getElementById("price-internet").innerHTML = parseInt(element.Internet) > 0 ? `<b>${formatMoney(element.Internet)}</b>` : '';
+      document.getElementById("price-rac").innerHTML = parseInt(element.Rac) > 0 ? `<b>${formatMoney(element.Rac)}</b>` : '';
+      document.getElementById("no-cu").innerHTML = parseInt(element.NoCu) > 0 ? `<b>${formatMoney(element.NoCu)}</b>` : '';
+
+      document.getElementById("total-all").innerHTML = parseInt(element.Tong) > 0 ? `<b>${formatMoney(element.Tong)}</b>` : '';
+
+      var source = $('#report').html();
+      return source;
+
+    };
+
+    function printPDF(source) {
+      var title = `Phòng trọ 325 - THÁNG ${currentMonth}/${currentYear}`;
+      var printWindow = window.open('', '', 'height=400,width=800');
+      printWindow.document.write(`<html><head><title></title>`);
+      printWindow.document.write('</head><body >');
+      printWindow.document.write(source);
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.print();
+    }
+
+    var index = 0;
+    function insertDataRow() {
+      index = 0;
+      idEdit = currentArray[index].Id;
+      openFromInsert();
+      $('#form-insert').modal('toggle');
+    }
+
+    function next() {
+      if (!updateInsertData()) {
+        index++;
+        if (index < currentArray.length) {
+          openFromInsert();
+        } else {
+          index = currentArray.length - 1;
+        }
+        idEdit = currentArray[index].Id;
+      }
+    }
+
+    function back() {
+      if (!updateInsertData()) {
+        index--;
+        if (index >= 0) {
+          openFromInsert();
+        } else {
+          index = 0;
+        }
+        idEdit = currentArray[index].Id;
+      }
+    }
+
+    function openFromInsert() {
+      var element = currentArray[index];
+      document.getElementById("title-form-insert").innerHTML = `PHIẾU BÁO TIỀN PHÒNG - THÁNG ${currentMonth}/${currentYear}`;
+      console.log(element);
+      Object.keys(element).forEach((key, index) => {
+        var row = document.getElementById(`${key}-insert`);
+        if (row) {
+          row.value = element[key]
+        }
+      });
+    }
+
+    function updateInsertData() {
+      var item = getFormInsert();
+      updateOneRow(idEdit, item);
+      return false;
+    }
+
+    function getFormInsert() {
+      var GiaPhong = document.getElementById("GiaPhong-insert").value;
+      var DienCu = parseInt(document.getElementById("DienCu-insert").value);
+      var DienMoi = parseInt(document.getElementById("DienMoi-insert").value);
+      var NuocCu = parseInt(document.getElementById("NuocCu-insert").value);
+      var NuocMoi = parseInt(document.getElementById("NuocMoi-insert").value);
+      var NoCu = document.getElementById("NoCu-insert").value;
+      return { GiaPhong, DienCu, DienMoi, NuocCu, NuocMoi, NoCu };
+    }
+
+    function showLoader() {
+      $("#loader").removeClass("hidden");
+      setTimeout(() => {
+        $("#loader").addClass("hidden");
+      }, 1000);
+    }
+
+  </script>
+
+  <div class="lds-facebook hidden" id="loader">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</body>
+
+</html>
